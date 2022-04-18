@@ -28,5 +28,7 @@ airodump-ng --band a INT
 # Wirelles adapter in monitor mode is not able to connect to a specific network. We need to switch it back to manage mode. $ airmon-ng stop INT $ iwconfig INT mode managed or just psysically disconnect wirelless adapter and reconnect it again.
 # check adapter mode
 iwconfig
-# start network manager again, if it is not running
-service network-manager start
+ifconfig INT down
+iwconfig INT mode managed
+ifconfig INT up
+service NetworkManager restart
