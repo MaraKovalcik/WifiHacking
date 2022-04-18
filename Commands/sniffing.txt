@@ -1,0 +1,7 @@
+# Targeted Packet sniffing
+$ airodump-ng MONITORMODEINTERFACE
+$ airodump-ng --bssid BSSID -channel CHANNEL --write FILENAME MONITORMODEINTERFACE
+
+# This show devices connected to the network with bssid BSSID
+# Airodmp-ng generated som files, including .cap file.
+# Open this file in wireshark and compare MAX addreses with airodump-ng output 

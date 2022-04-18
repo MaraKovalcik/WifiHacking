@@ -1,0 +1,32 @@
+# Variables
+INT = interface (e.g. wlan0, wlan1)
+MAC = MAC address (e.g. 00:11:22:33:44:55 ... should start with 00)
+
+# Enable monitor mode
+ifconfig INT down
+airmon-ng check kill
+iwconfig INT mode monitor
+ifconfig INT up
+airodump-ng INT
+
+# Packet injection test
+aireplay-ng -9 INT
+
+# Changing MAC
+ifconfig MAC
+ifconfig INT down
+ifconfig INT hw ether MAC
+ifconfig INT up
+ifconfig
+
+# Get all available networks
+airodump-ng INT
+
+# Get all available 5GHz networks
+airodump-ng --band a INT
+
+# Wirelles adapter in monitor mode is not able to connect to a specific network. We need to switch it back to manage mode. $ airmon-ng stop INT $ iwconfig INT mode managed or just psysically disconnect wirelless adapter and reconnect it again.
+# check adapter mode
+iwconfig
+# start network manager again, if it is not running
+service network-manager start

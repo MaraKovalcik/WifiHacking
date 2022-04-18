@@ -1,0 +1,14 @@
+# Capturing and printing Request/Responses
+from mitmproxy import http
+
+# flow is a container where all data is stored
+def request(flow):
+	#Code to handle request flows
+	print(flow)
+
+def response(flow):
+	#Code to handle response flows
+	print(flow)
+
+# Run the mitmproxy with this script
+./mitmdump -s /root/basic.py
